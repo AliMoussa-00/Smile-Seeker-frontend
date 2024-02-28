@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 
 function Home() {
     const [doctors, setDoctors] = useState([]);
@@ -26,7 +28,6 @@ function Home() {
             });
     }, [])
 
-    console.log(doctors);
     return (
         <>
             <h1>DATA doctors</h1>
@@ -35,6 +36,9 @@ function Home() {
                     <li key={doctor.id}><h4>{doctor.first_name}</h4></li>
                 ))}
             </ul>
+            <br />
+
+            <Link>Click Doctor</Link>
         </>
     );
 }
