@@ -1,4 +1,6 @@
+import { MDBBtn, MDBContainer } from "mdb-react-ui-kit";
 import { Navbar, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 
 export default function Header() {
@@ -20,6 +22,16 @@ export default function Header() {
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav" className="d-lg-none flex-grow-0">
+                    <Nav>
+                        <Nav.Link href="/login">
+                            <button type="button" className="btn btn-outline-info">Login</button>
+                        </Nav.Link>
+                    </Nav>
+                    <Nav>
+                        <Nav.Link href="/signup">
+                            <button type="button" className="btn btn-outline-info ms-2">Sign up</button>
+                        </Nav.Link>
+                    </Nav>
                     <Nav >
                         <Nav.Link href="#about">About</Nav.Link>
                     </Nav>
