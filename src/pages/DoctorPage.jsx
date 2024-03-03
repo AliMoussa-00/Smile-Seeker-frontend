@@ -3,6 +3,9 @@ import { MDBCard, MDBCardBody, MDBCardImage, MDBCardText, MDBCardTitle, MDBCol, 
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DocMap from '../components/DocMap';
+import ReserveBtn from '../components/ReserveBtn';
+import Review from '../components/Review';
+import CreateReview from '../components/CreateReview';
 
 const DoctorPage = () => {
     const location = useLocation();
@@ -49,6 +52,33 @@ const DoctorPage = () => {
                     <DocMap />
                 </MDBCol>
             </MDBRow>
+            <MDBRow className='mt-5 d-flex justify-content-center'>
+                <MDBCol md='6'>
+                    <ReserveBtn />
+                </MDBCol>
+            </MDBRow>
+            <MDBRow className='mt-5'>
+                <MDBCol>
+                    <h3>Reviews</h3>
+                </MDBCol>
+            </MDBRow>
+            <MDBRow className='mt-5 d-flex justify-content-center'>
+                <MDBCol md='6'>
+                    <Review />
+                </MDBCol>
+            </MDBRow>
+            <MDBRow className='mt-5 d-flex justify-content-center'>
+                <MDBCol md='6'>
+                    <Review />
+                </MDBCol>
+            </MDBRow>
+            <MDBRow className='mt-5 d-flex justify-content-center'>
+                <MDBCol md='6'>
+                    <Review />
+                </MDBCol>
+            </MDBRow>
+            {/* create a Review */}
+            <CreateReview />
         </MDBContainer>
     )
 }
