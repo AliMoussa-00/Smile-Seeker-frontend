@@ -3,10 +3,10 @@ import { MDBCard, MDBCardBody, MDBCardImage, MDBCardText, MDBCardTitle, MDBCol, 
 import { Link } from "react-router-dom";
 
 const DocCard = ({ doctor }) => {
-    
+
     return (
         <div className="d-sm-flex justify-content-center">
-            <Link to={`/doctor/${doctor.id}`} state={doctor} >
+            <Link to={`/doctor/${doctor.id}`} state={doctor} className="text-decoration-none" >
                 <MDBCard
                     style={{ maxWidth: '540px' }}
                 >

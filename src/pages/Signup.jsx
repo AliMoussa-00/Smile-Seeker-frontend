@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBInputGroup, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCheckbox, MDBFile } from 'mdb-react-ui-kit';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -10,7 +10,8 @@ const Signup = () => {
         password: '',
         confirmPassword: '',
         isDoctor: false,
-        address: ''
+        address: '',
+        profileImage: null
     });
     const [passwordMatchError, setPasswordMatchError] = useState('');
 
@@ -22,7 +23,15 @@ const Signup = () => {
         const { checked } = e.target;
         setFormData({ ...formData, isDoctor: checked });
     };
-
+    const handleImageSelect = event => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const source = { uri: event.target.result };
+            handleChange('profileImage', source);
+        };
+        reader.readAsDataURL(file);
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
@@ -38,6 +47,29 @@ const Signup = () => {
             <MDBRow className="justify-content-center">
                 <MDBCol md="5">
                     <form onSubmit={handleSubmit}>
+                        <MDBRow className="mb-2 justify-content-center">
+                            <MDBCol xs={6} md={4}>
+                                <img
+                                    src={formData.profileImage
+                                        ? URL.createObjectURL(formData.profileImage)
+                                        : 'src/assets/images/ss_logo_no_bg.png'
+                                    }
+                                    alt="Profile"
+                                    className='img-fluid rounded-circle'
+                                />
+                            </MDBCol>
+                        </MDBRow>
+                        <MDBRow className="mb-4 justify-content-center">
+                            <MDBCol md='6'>
+                                <MDBFile
+                                    size='sm'
+                                    id='formFileLg'
+                                    accept="image/*"
+                                    onChange={handleImageSelect}
+                                    style={{ marginBottom: 10 }}
+                                />
+                            </MDBCol>
+                        </MDBRow>
                         <MDBRow className="mb-4" >
                             <MDBCol size="auto" md='3'>
                                 <label htmlFor="firstName" className="col-form-label">First name</label>
