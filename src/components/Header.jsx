@@ -45,8 +45,8 @@ export default function Header() {
                     <img
                         src="src/assets/images/ss_logo_no_bg.png"
                         alt="ss_logo"
-                        height='50'
                         loading='lazy'
+                        style={{ objectFit: 'contain', height: '50px' }}
                     />
                 </Navbar.Brand>
                 <Navbar.Text className="" style={{ fontSize: '24px', fontFamily: 'Arial, sans-serif' }}>
@@ -59,7 +59,7 @@ export default function Header() {
                         {
                             userId
                                 ?
-                                <Nav.Link href={isDoc==="true" && "/docappointments"}>
+                                <Nav.Link href={isDoc === "true" && "/docappointments"}>
                                     <img
                                         src={`${picture}`}
                                         // src="src/assets/images/ss_logo_no_bg.png"

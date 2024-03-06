@@ -10,20 +10,40 @@ import CreateReview from '../components/CreateReview';
 const DoctorPage = () => {
     const location = useLocation();
     const [doctor, setDoctor] = useState(null);
+    const [picture, setPicture] = useState(null)
 
     useEffect(() => {
         const doctorData = location.state;
         setDoctor(doctorData);
+
+        const fetchPicture = async (doc_id) => {
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/api/v1/image/${doc_id}`);
+                if (!response.ok) {
+                    console.log('Failed to fetch image');
+                }
+                const blob = await response.blob();
+                const objectUrl = URL.createObjectURL(blob);
+                setPicture(objectUrl);
+            } catch (error) {
+                console.error('Error fetching image:', error);
+            }
+        }
+        fetchPicture(doctorData.id)
+
     }, [location.state]);
 
     return (
         <MDBContainer className="py-4">
             <MDBRow>
                 <MDBCol md="3" className='d-flex align-items-center'>
-                    <MDBCard >
+                    <MDBCard style={{ width: '300px' }}>
                         <MDBCardImage
-                            src='https://mdbootstrap.com/img/new/standard/city/062.webp'
-                            className="card-img-top" alt="Doctor" />
+                            src={picture ? picture : 'https://placehold.co/200x150@2x.png'}
+                            className="card-img-top" alt="Doctor"
+                            style={{ objectFit: 'contain', height: '200px' }}
+
+                        />
                     </MDBCard>
                 </MDBCol>
                 <MDBCol md="8">
@@ -35,8 +55,8 @@ const DoctorPage = () => {
                             <MDBCardText>
                                 <p>Email: {doctor?.email}</p>
                                 <p>Phone: {doctor?.phone}</p>
-                                <p>Lorem, ipsum dolor sit a met consectetur adipisicing elit. Necessitatibus asperiores sequi animi quas, numquam sint quae assumenda repellendus facilis molestiae. Quasi vitae ipsam rem repudiandae velit nesciunt non, sapiente quibusdam.</p>
-                                <p>address: Lorem, ipsum dolor sit a met consectetur</p>
+                                <p>{doctor?.description}</p>
+                                <p>address: Lorem ipsum dolor sit amet</p>
                             </MDBCardText>
                         </MDBCardBody>
                     </MDBCard>
