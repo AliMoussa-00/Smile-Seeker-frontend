@@ -1,7 +1,87 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCheckbox, MDBFile } from 'mdb-react-ui-kit';
+import { useNavigate } from "react-router-dom";
+
+const postImage = (image_api, imageName, image, user_id, isDoc, callback) => {
+
+    // Create a new file object with the modified name
+    const newImage = new File([image], imageName, {
+        type: image.type,
+    });
+
+    const formData = new FormData();
+    formData.append('image', newImage);
+
+    fetch(image_api, {
+        method: "POST",
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Success image storage:", data);
+            // store user ID and move to home page
+
+            // Move to home page upon successful storage
+            callback()
+            // Store user data in localStorage
+            localStorage.setItem('userId', user_id);
+            localStorage.setItem('isDoc', isDoc);
+            window.dispatchEvent(new Event("storage"));
+        })
+        .catch(error => {
+            console.error("Error sending POST request:", error);
+        });
+}
+
+const postData = (userData, callback) => {
+    const { firstName, lastName, email, phone, password, address } = userData;
+
+    const requestData = {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        phone,
+        password,
+        address
+    };
+
+    const API_END = userData.isDoctor ? "doctors" : "users";
+    const image_api_endpoint = userData.isDoctor ? "doctors_pictures" : "users_pictures";
+
+    fetch(`http://127.0.0.1:5000/api/v1/${API_END}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            // send the image to the backend
+            const user_id = data
+            const image_api = `http://127.0.0.1:5000/api/v1/${image_api_endpoint}/${user_id}`
+            postImage(
+                image_api,
+                `user_${user_id}_pic`,
+                userData.profileImage,
+                user_id,
+                userData.isDoctor,
+                callback
+            );
+        })
+        .catch(error => {
+            console.error("Error sending POST request:", error);
+        });
+
+
+
+}
+
 
 const Signup = () => {
+    // to go the home page once the login is successfull
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -11,7 +91,7 @@ const Signup = () => {
         confirmPassword: '',
         isDoctor: false,
         address: '',
-        profileImage: null
+        profileImage: null,
     });
     const [passwordMatchError, setPasswordMatchError] = useState('');
 
@@ -27,19 +107,21 @@ const Signup = () => {
         const file = event.target.files[0];
         const reader = new FileReader();
         reader.onload = function (event) {
-            const source = { uri: event.target.result };
-            handleChange('profileImage', source);
+            setFormData({ ...formData, profileImage: file });
         };
         reader.readAsDataURL(file);
     };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (formData.password !== formData.confirmPassword) {
             setPasswordMatchError('Passwords do not match');
             return;
         }
         setPasswordMatchError('');
-        console.log(formData);
+
+        postData(formData, () => { navigate("/"); })
     };
 
     return (

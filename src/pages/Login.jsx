@@ -1,8 +1,43 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
+
+// will be called if the user trying to log in is not a doc
+const checkLoginUser = (requestData, callback) => {
+    console.log("?? check if USER")
+}
+// will be first called when the user try to login
+// if not doc then we will check if user
+const checkLoginDoc = (requestData, callback) => {
+
+    fetch(`http://127.0.0.1:5000/api/v1/log_doc`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            // send the image to the backend
+            localStorage.setItem('userId', data.id);
+            localStorage.setItem('isDoc', true);
+            window.dispatchEvent(new Event("storage"));
+
+            callback();
+
+        })
+        .catch(error => {
+            console.error("Error Not LOGED IN DOC", error);
+            checkLoginUser(requestData, callback)
+        });
+}
 
 const Login = () => {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -16,7 +51,7 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Add login logic here
-        console.log(formData);
+        checkLoginDoc(formData, () => { navigate("/"); })
     };
 
     return (

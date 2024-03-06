@@ -1,6 +1,42 @@
+import { useEffect, useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 
+
 export default function Header() {
+    // check if the user is in localStorage
+    const [userId, setUserId] = useState(localStorage.getItem('userId'));
+    const [isDoc, setIsDoc] = useState(localStorage.getItem('isDoc'));
+    const [picture, setPicture] = useState(null)
+
+    // Update state whenever localStorage changes
+    useEffect(() => {
+        // fetch image
+        const fetchImage = async (userId) => {
+            if (userId) {
+                try {
+                    const response = await fetch(`http://127.0.0.1:5000/api/v1/image/${userId}`);
+                    if (!response.ok) {
+                        console.log('Failed to fetch image');
+                    }
+                    const blob = await response.blob();
+                    const objectUrl = URL.createObjectURL(blob);
+                    setPicture(objectUrl);
+                } catch (error) {
+                    console.error('Error fetching image:', error);
+                }
+            }
+        };
+
+        // Listen for storage events to update state
+        window.addEventListener('storage', () => {
+            setUserId(localStorage.getItem('userId'));
+            setIsDoc(localStorage.getItem('isDoc'));
+
+        });
+
+        fetchImage(userId)
+    }, [userId]); // Run effect only once, on component mount
+
 
     return (
         <header>
@@ -20,17 +56,41 @@ export default function Header() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav" className="d-lg-none flex-grow-0">
                     <Nav>
-                        <Nav.Link href="/login">
-                            <button type="button" className="btn btn-outline-info">Login</button>
-                        </Nav.Link>
+                        {
+                            userId
+                                ?
+                                <Nav.Link href="/docappointments">
+                                    <img
+                                        src={`${picture}`}
+                                        // src="src/assets/images/ss_logo_no_bg.png"
+                                        alt="userPic"
+                                        className='img-fluid rounded-circle'
+                                        style={{ width: '40px', height: '40px' }}
+                                    />
+                                </Nav.Link>
+                                :
+                                <Nav.Link href="/login">
+                                    <button type="button" className="btn btn-outline-info">Login</button>
+                                </Nav.Link>
+                        }
                     </Nav>
                     <Nav>
-                        <Nav.Link href="/signup">
-                            <button type="button" className="btn btn-outline-info ms-2">Sign up</button>
-                        </Nav.Link>
-                    </Nav>
-                    <Nav >
-                        <Nav.Link href="/docappointments">About</Nav.Link>
+                        {
+                            userId &&
+                            <Nav.Link href="/">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-info"
+                                    onClick={() => {
+                                        localStorage.removeItem('userId')
+                                        localStorage.removeItem('userImage')
+                                        localStorage.removeItem('isDoc')
+                                        setUserId(null)
+                                        setIsDoc(null)
+                                    }}
+                                >Logout</button>
+                            </Nav.Link>
+                        }
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
