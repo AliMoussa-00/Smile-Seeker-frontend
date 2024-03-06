@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCheckbox, MDBFile } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCheckbox, MDBFile, MDBTextArea } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
 
 const postImage = (image_api, imageName, image, user_id, isDoc, callback) => {
@@ -34,7 +34,7 @@ const postImage = (image_api, imageName, image, user_id, isDoc, callback) => {
 }
 
 const postData = (userData, callback) => {
-    const { firstName, lastName, email, phone, password, address } = userData;
+    const { firstName, lastName, email, phone, password, address, description } = userData;
 
     const requestData = {
         first_name: firstName,
@@ -42,7 +42,8 @@ const postData = (userData, callback) => {
         email,
         phone,
         password,
-        address
+        address,
+        description
     };
 
     const API_END = userData.isDoctor ? "doctors" : "users";
@@ -91,6 +92,7 @@ const Signup = () => {
         confirmPassword: '',
         isDoctor: false,
         address: '',
+        description: '',
         profileImage: null,
     });
     const [passwordMatchError, setPasswordMatchError] = useState('');
@@ -251,21 +253,41 @@ const Signup = () => {
                             </MDBCol>
                         </MDBRow>
                         {formData.isDoctor && ( // Conditionally render address input field
-                            <MDBRow className="mb-4">
-                                <MDBCol size="auto" md='3'>
-                                    <label htmlFor="address" className="col-form-label">Address</label>
-                                </MDBCol>
-                                <MDBCol>
-                                    <MDBInput
-                                        className='form-control'
-                                        type='text'
-                                        name="address"
-                                        value={formData.address}
-                                        onChange={handleChange}
-                                        required={formData.isDoctor} // Make address required only for doctors
-                                    />
-                                </MDBCol>
-                            </MDBRow>
+                            <>
+                                <MDBRow className="mb-4">
+                                    <MDBCol size="auto" md='3'>
+                                        <label htmlFor="address" className="col-form-label">Address</label>
+                                    </MDBCol>
+                                    <MDBCol>
+                                        <MDBInput
+                                            className='form-control'
+                                            type='text'
+                                            name="address"
+                                            value={formData.address}
+                                            onChange={handleChange}
+                                            required={formData.isDoctor} // Make address required only for doctors
+                                        />
+                                    </MDBCol>
+                                </MDBRow>
+                                <MDBRow>
+                                    <MDBCol>
+                                        <label htmlFor="description" className="col-form-label">
+                                            Tell us about yourself:
+                                        </label>
+                                    </MDBCol>
+                                </MDBRow>
+                                <MDBRow className="mb-4">
+                                    <MDBCol>
+                                        <MDBTextArea
+                                            id='textAreaExample'
+                                            rows={4}
+                                            name="description"
+                                            value={formData.description}
+                                            onChange={handleChange}
+                                            required={formData.isDoctor} />
+                                    </MDBCol>
+                                </MDBRow>
+                            </>
                         )}
                         <div className="d-grid gap-2">
                             <input className="btn btn-primary" type="submit" value="Submit"></input>
