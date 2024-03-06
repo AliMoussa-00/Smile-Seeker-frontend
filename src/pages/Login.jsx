@@ -6,7 +6,26 @@ import { useNavigate } from "react-router-dom";
 
 // will be called if the user trying to log in is not a doc
 const checkLoginUser = (requestData, callback) => {
-    console.log("?? check if USER")
+    fetch(`http://127.0.0.1:5000/api/v1/log_user`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            // send the image to the backend
+            localStorage.setItem('userId', data.id);
+            localStorage.setItem('isDoc', false);
+            window.dispatchEvent(new Event("storage"));
+
+            callback();
+
+        })
+        .catch(error => {
+            console.error("Not Doc Not User", error);
+        });
 }
 // will be first called when the user try to login
 // if not doc then we will check if user
