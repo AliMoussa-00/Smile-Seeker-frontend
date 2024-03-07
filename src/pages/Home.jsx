@@ -28,7 +28,9 @@ function Home() {
                     : (
                         < MDBRow className='row-cols-1 row-cols-md-3 g-4' >
                             {doctors.map((doctor) => (
-                                <MDBCol key={doctor.id}>
+                                <MDBCol
+                                    key={doctor.id}
+                                >
                                     <DocCard doctor={doctor} />
                                 </MDBCol>))}
                         </MDBRow >

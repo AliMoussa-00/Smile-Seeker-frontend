@@ -46,7 +46,7 @@ export default function Header() {
                         src="src/assets/images/ss_logo_no_bg.png"
                         alt="ss_logo"
                         loading='lazy'
-                        style={{ objectFit: 'contain', height: '50px' }}
+                        style={{ objectFit: 'contain', height: '50px', width: '50px' }}
                     />
                 </Navbar.Brand>
                 <Navbar.Text className="" style={{ fontSize: '24px', fontFamily: 'Arial, sans-serif' }}>
@@ -65,7 +65,7 @@ export default function Header() {
                                         // src="src/assets/images/ss_logo_no_bg.png"
                                         alt="userPic"
                                         className='img-fluid rounded-circle'
-                                        style={{ width: '40px', height: '40px' }}
+                                        style={{ objectFit: 'contain', width: '40px', height: '40px' }}
                                     />
                                 </Nav.Link>
                                 :

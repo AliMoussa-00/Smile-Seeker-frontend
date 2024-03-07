@@ -1,8 +1,30 @@
 /* eslint-disable react/prop-types */
 import { MDBCard, MDBCardBody, MDBCardImage, MDBCardText, MDBCardTitle, MDBCol, MDBRow } from "mdb-react-ui-kit";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const DocCard = ({ doctor }) => {
+    const [picture, setPicture] = useState(null)
+
+    useEffect(() => {
+        const fetchImage = async (doc_id) => {
+            if (doc_id) {
+                try {
+                    const response = await fetch(`http://127.0.0.1:5000/api/v1/image/${doc_id}`);
+                    if (!response.ok) {
+                        console.log('Failed to fetch image');
+                    }
+                    const blob = await response.blob();
+                    const objectUrl = URL.createObjectURL(blob);
+                    setPicture(objectUrl);
+                } catch (error) {
+                    console.error('Error fetching image:', error);
+                }
+            }
+        };
+
+        fetchImage(doctor.id)
+    }, [doctor.id]);
 
     return (
         <div className="d-sm-flex justify-content-center">
@@ -13,9 +35,15 @@ const DocCard = ({ doctor }) => {
                     <MDBRow className='g-0'>
                         <MDBCol >
                             <MDBCardImage
-                                src='https://mdbootstrap.com/img/new/standard/city/062.webp'
+                                src={
+                                    picture
+                                        ? picture
+                                        : 'https://mdbootstrap.com/img/new/standard/city/062.webp'
+                                }
                                 alt='...'
-                                fluid className="img-fluid h-100"
+                                fluid className="img-fluid"
+                                loading='lazy'
+                                style={{ objectFit: 'contain', height: '150px', width: '200px' }}
                             />
                         </MDBCol>
                         <MDBCol style={{ minWidth: '200px' }}>
@@ -33,7 +61,7 @@ const DocCard = ({ doctor }) => {
                     </MDBRow>
                 </MDBCard>
             </Link>
-        </div>
+        </div >
     );
 };
 
