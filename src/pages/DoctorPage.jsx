@@ -7,6 +7,8 @@ import ReserveBtn from '../components/ReserveBtn';
 import Review from '../components/Review';
 import CreateReview from '../components/CreateReview';
 
+
+
 const DoctorPage = () => {
     const location = useLocation();
     const [doctor, setDoctor] = useState(null);
@@ -36,7 +38,7 @@ const DoctorPage = () => {
     return (
         <MDBContainer className="py-4">
             <MDBRow>
-                <MDBCol md="3" className='d-flex align-items-center'>
+                <MDBCol md="3" className='d-flex align-items-center  justify-content-center'>
                     <MDBCard style={{ width: '300px' }}>
                         <MDBCardImage
                             src={picture ? picture : 'https://placehold.co/200x150@2x.png'}
@@ -74,7 +76,7 @@ const DoctorPage = () => {
             </MDBRow>
             <MDBRow className='mt-5 d-flex justify-content-center'>
                 <MDBCol md='6'>
-                    <ReserveBtn />
+                    <ReserveBtn docId={doctor?.id} />
                 </MDBCol>
             </MDBRow>
             <MDBRow className='mt-5'>
