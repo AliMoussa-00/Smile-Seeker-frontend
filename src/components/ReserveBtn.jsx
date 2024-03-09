@@ -87,7 +87,7 @@ const ReserveBtn = (props) => {
                 <Modal.Body>
                     {userId ? (
                         <>
-                            <p>Calendar Picker Goes Here</p>
+                            <p>Please choose a day for the appointment</p>
                             <BasicDatePicker selectedDate={selectedDate} onDateChange={handleDateChange} />
                         </>
                     ) : (

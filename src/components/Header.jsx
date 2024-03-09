@@ -59,7 +59,7 @@ export default function Header() {
                         {
                             userId
                                 ?
-                                <Nav.Link href={isDoc === "true" && "/docappointments"}>
+                                <Nav.Link href={isDoc === "true" && `/docappointments/${userId}`}>
                                     <img
                                         src={`${picture}`}
                                         // src="src/assets/images/ss_logo_no_bg.png"

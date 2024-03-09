@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='/login' exact Component={Login} />
           <Route path='/signup' exact Component={Signup} />
           <Route path='/doctor/:doc_id' exact Component={DoctorPage} />
-          <Route path='/docappointments' exact Component={DocAppointment} />
+          <Route path='/docappointments/:doc_id' exact Component={DocAppointment} />
         </Routes>
       </Router>
     </div>
