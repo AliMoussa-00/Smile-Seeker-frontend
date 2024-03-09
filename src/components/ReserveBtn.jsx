@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import dayjs from 'dayjs';
 import BasicDatePicker from "./DatePicker";
 
 const createAppointment = (userData, callback) => {
@@ -23,6 +22,7 @@ const createAppointment = (userData, callback) => {
         .then(data => {
             // send the image to the backend
             console.log("Appointment created: ", data)
+            callback();
         })
         .catch(error => {
             console.error("Error creating appointment :", error);
@@ -58,7 +58,10 @@ const ReserveBtn = (props) => {
 
     const handleSubmit = () => {
         if (selectedDate) {
-            createAppointment({ docId, userId, selectedDate })
+            createAppointment({ docId, userId, selectedDate }, () => {
+                setShowModal(false)
+                alert("You have successfully reserved an appointment ")
+            })
         }
         else {
             alert('Please select a day for the appointment')

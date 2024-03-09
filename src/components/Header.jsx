@@ -35,12 +35,12 @@ export default function Header() {
         });
 
         fetchImage(userId)
-    }, [userId]); // Run effect only once, on component mount
+    }, [userId,]); // Run effect only once, on component mount
 
 
     return (
         <header>
-            <Navbar bg="light" expand="lg" fluid className="px-lg-4 py-lg-2 justify-content-between">
+            <Navbar bg="light" expand="lg" className="px-lg-4 py-lg-2 justify-content-between">
                 <Navbar.Brand href="/">
                     <img
                         src="src/assets/images/ss_logo_no_bg.png"
@@ -59,7 +59,7 @@ export default function Header() {
                         {
                             userId
                                 ?
-                                <Nav.Link href={isDoc === "true" && `/docappointments/${userId}`}>
+                                <Nav.Link href={isDoc === "true" ? `/docappointments/${userId}` : `/userappointments/${userId}`}>
                                     <img
                                         src={`${picture}`}
                                         // src="src/assets/images/ss_logo_no_bg.png"
