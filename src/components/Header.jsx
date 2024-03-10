@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
-
+import logo from '../assets/images/ss_logo_no_bg.png'
 
 export default function Header() {
     // check if the user is in localStorage
@@ -43,7 +43,7 @@ export default function Header() {
             <Navbar bg="light" expand="lg" className="px-lg-4 py-lg-2 justify-content-between">
                 <Navbar.Brand href="/">
                     <img
-                        src="src/assets/images/ss_logo_no_bg.png"
+                        src={`${logo}`}
                         alt="ss_logo"
                         loading='lazy'
                         style={{ objectFit: 'contain', height: '50px', width: '50px' }}
