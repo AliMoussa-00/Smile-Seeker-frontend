@@ -12,7 +12,10 @@ import CreateReview from '../components/CreateReview';
 const DoctorPage = () => {
     const location = useLocation();
     const [doctor, setDoctor] = useState(null);
-    const [picture, setPicture] = useState(null)
+    const [picture, setPicture] = useState(null);
+    const isDoc = localStorage.getItem('isDoc');
+    const [reviews, setReviews] = useState([])
+
 
     useEffect(() => {
         const doctorData = location.state;
@@ -33,7 +36,30 @@ const DoctorPage = () => {
         }
         fetchPicture(doctorData.id)
 
+        const fetchReviews = async (doc_id) => {
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/api/v1/doc_reviews/${doc_id}`);
+                if (!response.ok) {
+                    console.log('Failed to fetch Reviews');
+                }
+                else {
+                    const reviewsData = await response.json(); // Parse JSON response
+                    setReviews(reviewsData);
+                    console.log(reviewsData)
+                }
+            } catch (error) {
+                console.error('Error fetching Reviews:', error);
+            }
+        }
+        fetchReviews(doctorData.id)
+
     }, [location.state]);
+
+    // add the created review to the list of reviews
+    const addReviewToList = (newReview) => {
+        setReviews([...reviews, newReview])
+    }
+
 
     return (
         <MDBContainer className="py-4">
@@ -84,23 +110,23 @@ const DoctorPage = () => {
                     <h3>Reviews</h3>
                 </MDBCol>
             </MDBRow>
-            <MDBRow className='mt-5 d-flex justify-content-center'>
-                <MDBCol md='6'>
-                    <Review />
-                </MDBCol>
-            </MDBRow>
-            <MDBRow className='mt-5 d-flex justify-content-center'>
-                <MDBCol md='6'>
-                    <Review />
-                </MDBCol>
-            </MDBRow>
-            <MDBRow className='mt-5 d-flex justify-content-center'>
-                <MDBCol md='6'>
-                    <Review />
-                </MDBCol>
-            </MDBRow>
-            {/* create a Review */}
-            <CreateReview />
+            {
+                reviews?.length > 0
+                    ?
+                    reviews.map((review) => (
+                        <MDBRow className='mt-5 d-flex justify-content-center' key={review.id}>
+                            <MDBCol md='6'>
+                                <Review review={review} />
+                            </MDBCol>
+                        </MDBRow>
+                    ))
+                    :
+                    <h6>There are no reviews for now</h6>
+            }
+            {/* create a Review only if not a doctor or user not logged in */}
+            {(localStorage.getItem('userId') === null || isDoc === 'false') &&
+                <CreateReview docId={doctor?.id} docName={doctor?.first_name} addReviewToList={addReviewToList} />
+            }
         </MDBContainer>
     )
 }
