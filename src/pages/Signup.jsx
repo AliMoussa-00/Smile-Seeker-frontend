@@ -2,81 +2,7 @@ import { useState } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCheckbox, MDBFile, MDBTextArea } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
 
-const postImage = (image_api, imageName, image, user_id, isDoc, callback) => {
 
-    // Create a new file object with the modified name
-    const newImage = new File([image], imageName, {
-        type: image.type,
-    });
-
-    const formData = new FormData();
-    formData.append('image', newImage);
-
-    fetch(image_api, {
-        method: "POST",
-        body: formData
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Success image storage:", data);
-            // store user ID and move to home page
-
-            // Move to home page upon successful storage
-            callback()
-            // Store user data in localStorage
-            localStorage.setItem('userId', user_id);
-            localStorage.setItem('isDoc', isDoc);
-            window.dispatchEvent(new Event("storage"));
-        })
-        .catch(error => {
-            console.error("Error sending POST request:", error);
-        });
-}
-
-const postData = (userData, callback) => {
-    const { firstName, lastName, email, phone, password, address, description } = userData;
-
-    const requestData = {
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        phone,
-        password,
-        address,
-        description
-    };
-
-    const API_END = userData.isDoctor ? "doctors" : "users";
-    const image_api_endpoint = userData.isDoctor ? "doctors_pictures" : "users_pictures";
-
-    fetch(`http://127.0.0.1:5000/api/v1/${API_END}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestData)
-    })
-        .then(response => response.json())
-        .then(data => {
-            // send the image to the backend
-            const user_id = data
-            const image_api = `http://127.0.0.1:5000/api/v1/${image_api_endpoint}/${user_id}`
-            postImage(
-                image_api,
-                `user_${user_id}_pic`,
-                userData.profileImage,
-                user_id,
-                userData.isDoctor,
-                callback
-            );
-        })
-        .catch(error => {
-            console.error("Error sending POST request:", error);
-        });
-
-
-
-}
 
 
 const Signup = () => {
@@ -96,6 +22,7 @@ const Signup = () => {
         profileImage: null,
     });
     const [passwordMatchError, setPasswordMatchError] = useState('');
+    const [emailExists, setEmailExists] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -122,15 +49,102 @@ const Signup = () => {
             return;
         }
         setPasswordMatchError('');
+        setEmailExists(false);
 
         postData(formData, () => { navigate("/"); })
     };
+
+    const postData = (userData, callback) => {
+        const { firstName, lastName, email, phone, password, address, description } = userData;
+
+        const requestData = {
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            phone,
+            password,
+            address,
+            description
+        };
+
+        const API_END = userData.isDoctor ? "doctors" : "users";
+        const image_api_endpoint = userData.isDoctor ? "doctors_pictures" : "users_pictures";
+
+        fetch(`http://127.0.0.1:5000/api/v1/${API_END}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(async response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                else if (response.status == 501) {
+                    setEmailExists(true);
+                    throw new Error("EEEEE Email already exists");
+                }
+                else {
+                    // If the response status code indicates an error, throw an error with the response JSON
+                    const errorData = response.json();
+                    throw new Error(`error signing up: ${errorData}`);
+                }
+            })
+            .then(data => {
+                // send the image to the backend
+                const user_id = data
+                const image_api = `http://127.0.0.1:5000/api/v1/${image_api_endpoint}/${user_id}`
+                postImage(
+                    image_api,
+                    `user_${user_id}_pic`,
+                    userData.profileImage,
+                    user_id,
+                    userData.isDoctor,
+                    callback
+                );
+            })
+            .catch(error => {
+                console.error("Error sending POST request:", error);
+            });
+    }
+
+    const postImage = (image_api, imageName, image, user_id, isDoc, callback) => {
+
+        // Create a new file object with the modified name
+        const newImage = new File([image], imageName, {
+            type: image.type,
+        });
+
+        const formData = new FormData();
+        formData.append('image', newImage);
+
+        fetch(image_api, {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Success image storage:", data);
+                // store user ID and move to home page
+
+                // Move to home page upon successful storage
+                callback()
+                // Store user data in localStorage
+                localStorage.setItem('userId', user_id);
+                localStorage.setItem('isDoc', isDoc);
+                window.dispatchEvent(new Event("storage"));
+            })
+            .catch(error => {
+                console.error("Error sending POST request:", error);
+            });
+    }
 
     return (
         <MDBContainer className="py-4">
             <MDBRow className="justify-content-center">
                 <MDBCol md="5">
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} >
                         <MDBRow className="mb-2 justify-content-center">
                             <MDBCol xs={6} md={4}>
                                 <img
@@ -188,7 +202,8 @@ const Signup = () => {
                             </MDBCol>
                             <MDBCol>
                                 <MDBInput
-                                    className='form-control' type='email'
+                                    className={`form-control ${emailExists ? 'is-invalid' : ''}`}
+                                    type='email'
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}

@@ -4,55 +4,6 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
 
-// will be called if the user trying to log in is not a doc
-const checkLoginUser = (requestData, callback) => {
-    fetch(`http://127.0.0.1:5000/api/v1/log_user`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestData)
-    })
-        .then(response => response.json())
-        .then(data => {
-            // send the image to the backend
-            localStorage.setItem('userId', data.id);
-            localStorage.setItem('isDoc', false);
-            window.dispatchEvent(new Event("storage"));
-
-            callback();
-
-        })
-        .catch(error => {
-            console.error("Not Doc Not User", error);
-        });
-}
-// will be first called when the user try to login
-// if not doc then we will check if user
-const checkLoginDoc = (requestData, callback) => {
-
-    fetch(`http://127.0.0.1:5000/api/v1/log_doc`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestData)
-    })
-        .then(response => response.json())
-        .then(data => {
-            // send the image to the backend
-            localStorage.setItem('userId', data.id);
-            localStorage.setItem('isDoc', true);
-            window.dispatchEvent(new Event("storage"));
-
-            callback();
-
-        })
-        .catch(error => {
-            console.error("Error Not LOGED IN DOC", error);
-            checkLoginUser(requestData, callback)
-        });
-}
 
 const Login = () => {
     const navigate = useNavigate();
@@ -61,6 +12,7 @@ const Login = () => {
         email: '',
         password: ''
     });
+    const [error, setError] = useState(false)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -70,8 +22,59 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Add login logic here
+        setError(false)
         checkLoginDoc(formData, () => { navigate("/"); })
     };
+
+    // will be called if the user trying to log in is not a doc
+    const checkLoginUser = (requestData, callback) => {
+        fetch(`http://127.0.0.1:5000/api/v1/log_user`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                // send the image to the backend
+                localStorage.setItem('userId', data.id);
+                localStorage.setItem('isDoc', false);
+                window.dispatchEvent(new Event("storage"));
+
+                callback();
+
+            })
+            .catch(error => {
+                console.error("Not Doc Not User", error);
+                setError(true)
+            });
+    }
+    // will be first called when the user try to login
+    // if not doc then we will check if user
+    const checkLoginDoc = (requestData, callback) => {
+        fetch(`http://127.0.0.1:5000/api/v1/log_doc`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                // send the image to the backend
+                localStorage.setItem('userId', data.id);
+                localStorage.setItem('isDoc', true);
+                window.dispatchEvent(new Event("storage"));
+
+                callback();
+
+            })
+            .catch(error => {
+                console.error("Error Not LOGED IN DOC", error);
+                checkLoginUser(requestData, callback)
+            });
+    }
 
     return (
         <MDBContainer className="py-4">
@@ -94,7 +97,7 @@ const Login = () => {
                                     type="email"
                                     name="email"
                                     id="email"
-                                    className="form-control"
+                                    className={`form-control ${error ? 'is-invalid' : ''}`}
                                     value={formData.email}
                                     onChange={handleChange}
                                     required
@@ -110,7 +113,7 @@ const Login = () => {
                                     type="password"
                                     name="password"
                                     id="password"
-                                    className="form-control"
+                                    className={`form-control ${error ? 'is-invalid' : ''}`}
                                     value={formData.password}
                                     onChange={handleChange}
                                     required
