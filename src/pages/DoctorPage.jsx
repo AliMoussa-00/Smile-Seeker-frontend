@@ -116,7 +116,7 @@ const DoctorPage = () => {
                     reviews.map((review) => (
                         <MDBRow className='mt-5 d-flex justify-content-center' key={review.id}>
                             <MDBCol md='6'>
-                                <Review review={review} />
+                                <Review review={review} showBtn={false} deleteReview={()=>{} } />
                             </MDBCol>
                         </MDBRow>
                     ))

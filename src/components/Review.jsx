@@ -2,7 +2,7 @@
 import { MDBCard, MDBCardBody, MDBCardText } from "mdb-react-ui-kit";
 import { useEffect, useState } from "react";
 
-const Review = ({ review }) => {
+const Review = ({ review, showBtn, deleteReview }) => {
     const [user, setUser] = useState(null);
     const [userPicture, setUserPicture] = useState(null);
 
@@ -55,6 +55,17 @@ const Review = ({ review }) => {
                         <p className='fw-bold mb-1'>{user?.first_name} {user?.last_name}</p>
                         <p className='text-muted mb-0'>{user?.email}</p>
                     </div>
+                    {showBtn === true &&
+                        <div className="ms-auto">
+                            <button
+                                type="button"
+                                className="btn btn-outline-danger"
+                                onClick={deleteReview} // Delete appointment
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    }
                 </div>
                 <MDBCardText className="mt-2 ms-1">{review.comment}</MDBCardText>
             </MDBCardBody>

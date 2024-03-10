@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import DocAppointment from './pages/DocAppointments.jsx'
-import UserAppointments from './pages/UserAppointments.jsx'
+import UserPage from './pages/UserPage.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <div className="d-flex flex-column min-vh-100">
@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='/signup' exact Component={Signup} />
           <Route path='/doctor/:doc_id' exact Component={DoctorPage} />
           <Route path='/docappointments/:doc_id' exact Component={DocAppointment} />
-          <Route path='/userappointments/:user_id' exact Component={UserAppointments} />
+          <Route path='/userappointments/:user_id' exact Component={UserPage} />
         </Routes>
       </Router>
     </div>
