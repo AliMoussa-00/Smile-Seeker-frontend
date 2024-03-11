@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { Alert } from 'react-bootstrap';
 
 // eslint-disable-next-line react/prop-types
 const CreateReview = ({ docId, docName, addReviewToList }) => {
     const userId = localStorage.getItem('userId');
+    const [review, setReview] = useState('');
 
     const [showModal, setShowModal] = useState(false);
-    const [review, setReview] = useState('');
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
     const navigate = useNavigate()
 
     const handleShowModal = () => setShowModal(true);
@@ -20,6 +23,14 @@ const CreateReview = ({ docId, docName, addReviewToList }) => {
             setReview('');
             setShowModal(false);
 
+            // show success Alert
+            setTimeout(() => {
+                setShowSuccessMessage(true);
+                // After three seconds, set showSuccessMessage back to false
+                setTimeout(() => {
+                    setShowSuccessMessage(false);
+                }, 4000);
+            }, 1000); // Simulating a delay of 1 second for the request
         })
     };
 
@@ -57,7 +68,11 @@ const CreateReview = ({ docId, docName, addReviewToList }) => {
             <Button className="mt-3" variant="primary" onClick={handleShowModal}>
                 Add Review
             </Button>
-
+            {showSuccessMessage && (
+                <Alert variant="success">
+                    your review has been submitted!
+                </Alert>
+            )}
             <Modal show={showModal} onHide={handleCloseModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Add Review</Modal.Title>

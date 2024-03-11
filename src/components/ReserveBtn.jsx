@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import BasicDatePicker from "./DatePicker";
+import { Alert } from 'react-bootstrap';
 
 const createAppointment = (userData, callback) => {
     const { docId, userId, selectedDate } = userData;
@@ -37,6 +38,7 @@ const ReserveBtn = (props) => {
     const userId = localStorage.getItem('userId');
     const [selectedDate, setSelectedDate] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const handleDateChange = (date) => {
         // Manually adjust the date
@@ -60,7 +62,15 @@ const ReserveBtn = (props) => {
         if (selectedDate) {
             createAppointment({ docId, userId, selectedDate }, () => {
                 setShowModal(false)
-                alert("You have successfully reserved an appointment ")
+
+                // show success Alert
+                setTimeout(() => {
+                    setShowSuccessMessage(true);
+                    // After three seconds, set showSuccessMessage back to false
+                    setTimeout(() => {
+                        setShowSuccessMessage(false);
+                    }, 4000);
+                }, 1000); // Simulating a delay of 1 second for the request
             })
         }
         else {
@@ -77,6 +87,11 @@ const ReserveBtn = (props) => {
                 >
                     Reserve an appointment
                 </button>
+                {showSuccessMessage && (
+                    <Alert variant="success">
+                        Reserved an appointment successfully!
+                    </Alert>
+                )}
             </div>
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
