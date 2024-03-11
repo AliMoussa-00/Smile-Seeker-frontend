@@ -23,7 +23,7 @@ const Login = () => {
         e.preventDefault();
         // Add login logic here
         setError(false)
-        checkLoginDoc(formData, () => { navigate("/"); })
+        checkLoginDoc(formData, () => { navigate("/home"); })
     };
 
     // will be called if the user trying to log in is not a doc

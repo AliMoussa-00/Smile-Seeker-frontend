@@ -3,8 +3,6 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCheckbox, MDBFile, MDBTextAr
 import { useNavigate } from "react-router-dom";
 
 
-
-
 const Signup = () => {
     // to go the home page once the login is successfull
     const navigate = useNavigate();
@@ -51,7 +49,7 @@ const Signup = () => {
         setPasswordMatchError('');
         setEmailExists(false);
 
-        postData(formData, () => { navigate("/"); })
+        postData(formData, () => { navigate("/home"); })
     };
 
     const postData = (userData, callback) => {

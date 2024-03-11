@@ -41,7 +41,7 @@ export default function Header() {
     return (
         <header>
             <Navbar bg="light" expand="lg" className="px-lg-4 py-lg-2 justify-content-between">
-                <Navbar.Brand href="/">
+                <Navbar.Brand href="/home">
                     <img
                         src={`${logo}`}
                         alt="ss_logo"
@@ -50,7 +50,7 @@ export default function Header() {
                     />
                 </Navbar.Brand>
                 <Navbar.Text className="" style={{ fontSize: '24px', fontFamily: 'Arial, sans-serif' }}>
-                    Find the dentist near you
+                    Smile Seeker
                 </Navbar.Text>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -77,7 +77,7 @@ export default function Header() {
                     <Nav>
                         {
                             userId &&
-                            <Nav.Link href="/">
+                            <Nav.Link href="/home">
                                 <button
                                     type="button"
                                     className="btn btn-outline-info"

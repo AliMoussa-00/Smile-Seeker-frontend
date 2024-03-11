@@ -10,6 +10,7 @@ import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import DocAppointment from './pages/DocAppointments.jsx'
 import UserPage from './pages/UserPage.jsx'
+import LandingPage from './pages/LandingPage.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <div className="d-flex flex-column min-vh-100">
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <div className="flex-grow-1 p-3">
       <Router>
         <Routes>
-          <Route path='/' exact Component={Home} />
+          <Route path='/' exact Component={LandingPage} />
+          <Route path='/landing-page' exact Component={LandingPage} />
+          <Route path='/home' exact Component={Home} />
           <Route path='/login' exact Component={Login} />
           <Route path='/signup' exact Component={Signup} />
           <Route path='/doctor/:doc_id' exact Component={DoctorPage} />
