@@ -1,7 +1,5 @@
-import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/ss_logo_no_bg.png';
-import autoAnimate from "@formkit/auto-animate";
 import { MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import '../assets/styles/landingPage.css'; // Import CSS for styling
 
@@ -20,7 +18,7 @@ const LandingPage = () => {
                 <MDBCol md={7} className="d-flex justify-content-center">
                     <MDBContainer className="text-container">
                         <h1 className="heading">Welcome to Smile Seeker</h1>
-                        <p>Find the perfect doctor for your needs and book appointments effortlessly.</p>
+                        <p>Find the perfect dentist for your needs and book appointments effortlessly.</p>
                         <p className="subheading">With Smile Seeker, you can:</p>
                         <div className="list-group list-group-light text-start">
                             <a href="#" className="list-group-item list-group-item-action px-3 border-0 rounded-3 mb-1 list-group-item-info">
