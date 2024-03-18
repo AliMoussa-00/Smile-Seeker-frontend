@@ -30,9 +30,9 @@ const DocCard = ({ doctor }) => {
         <div className="d-sm-flex justify-content-center">
             <Link to={`/doctor/${doctor.id}`} state={doctor} className="text-decoration-none" >
                 <MDBCard
-                    style={{ maxWidth: '540px' }}
+                    style={{ width: '350px' }}
                 >
-                    <MDBRow className='g-0'>
+                    <MDBRow className='g-0 justify-content-center'>
                         <MDBCol >
                             <MDBCardImage
                                 src={
@@ -43,11 +43,11 @@ const DocCard = ({ doctor }) => {
                                 alt='...'
                                 fluid className="img-fluid"
                                 loading='lazy'
-                                style={{ objectFit: 'contain', height: '150px', width: '200px' }}
+                                style={{ objectFit: 'contain', height: '150px' }}
                             />
                         </MDBCol>
                         <MDBCol style={{ minWidth: '200px' }}>
-                            <MDBCardBody className="pe-3">
+                            <MDBCardBody className="pe-2">
                                 <MDBCardTitle>{`${doctor.last_name} ${doctor.first_name}`}</MDBCardTitle>
                                 <MDBCardText className="fs-6">
                                     <small className='text-muted'>{`email: ${doctor.email}`}</small><br />
@@ -61,7 +61,7 @@ const DocCard = ({ doctor }) => {
                     </MDBRow>
                 </MDBCard>
             </Link>
-        </div >
+        </div>
     );
 };
 

@@ -65,7 +65,7 @@ const DoctorPage = () => {
         <MDBContainer className="py-4">
             <MDBRow>
                 <MDBCol md="3" className='d-flex align-items-center  justify-content-center'>
-                    <MDBCard style={{ width: '300px' }}>
+                    <MDBCard >
                         <MDBCardImage
                             src={picture ? picture : 'https://placehold.co/200x150@2x.png'}
                             className="card-img-top" alt="Doctor"
@@ -116,7 +116,7 @@ const DoctorPage = () => {
                     reviews.map((review) => (
                         <MDBRow className='mt-5 d-flex justify-content-center' key={review.id}>
                             <MDBCol md='6'>
-                                <Review review={review} showBtn={false} deleteReview={()=>{} } />
+                                <Review review={review} showBtn={false} deleteReview={() => { }} />
                             </MDBCol>
                         </MDBRow>
                     ))
